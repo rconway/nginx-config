@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+ORIG_DIR="$(pwd)"
+cd "$(dirname "$0")"
+BIN_DIR="$(pwd)"
+
+trap "cd '${ORIG_DIR}'" EXIT
+
+source ./create-network
+
+# run nginx - port 8080
+docker run --rm --name nginx-proxy \
+  --network "${NETWORK_NAME}" \
+  -v $PWD/nginx-proxy.conf:/etc/nginx/nginx.conf \
+  -p 9090:80 \
+  nginx
